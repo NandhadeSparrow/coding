@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monty Hall Problem Simulation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Monty Hall Problem Simulation</h1>
+<p>Click on a door to make your choice:</p>
+
+<div id="doors">
+  <div class="door" onclick="makeChoice(1)">Door 1</div>
+  <div class="door" onclick="makeChoice(2)">Door 2</div>
+  <div class="door" onclick="makeChoice(3)">Door 3</div>
+</div>
+
+<p id="result"></p>
+
+<script>
+  let correctDoor = Math.floor(Math.random() * 3) + 1;
+  let userChoice = null;
+
+  function makeChoice(choice) {
+    userChoice = choice;
+    revealDoor();
+  }
+
+  function revealDoor() {
+    let doorsToReveal = [1, 2, 3].filter(door => door !== userChoice && door !== correctDoor);
+    let doorToReveal = doorsToReveal[Math.floor(Math.random() * doorsToReveal.length)];
+
+    document.getElementById('result').innerHTML = `The host reveals that there is nothing behind Door ${doorToReveal}.`;
+
+    askSwitch();
+  }
+
+  function askSwitch() {
+    document.getElementById('result').innerHTML += '<p>Do you want to switch your choice?</p>';
+    document.getElementById('doors').innerHTML = '<button onclick="evaluateChoice(true)">Yes</button> <button onclick="evaluateChoice(false)">No</button>';
+  }
+
+  function evaluateChoice(switchChoice) {
+    let finalChoice = switchChoice ? [1, 2, 3].filter(door => door !== userChoice && door !== doorToReveal)[0] : userChoice;
+
+    if (finalChoice === correctDoor) {
+      document.getElementById('result').innerHTML = '<p>Congratulations! You win!</p>';
+    } else {
+      document.getElementById('result').innerHTML = `<p>Sorry, the correct door was ${correctDoor}. You lose.</p>`;
+    }
+
+    document.getElementById('doors').innerHTML = '<p>Refresh the page to play again.</p>';
+  }
+</script>
+
+</body>
+</html>
